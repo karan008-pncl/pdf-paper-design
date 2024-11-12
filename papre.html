@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Question Paper</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .bordered {
+      border: 1px solid black;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .section-header {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .sub-section {
+      margin-bottom: 10px;
+    }
+    .questions {
+      margin-left: 20px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    @media print {
+      .print-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4 bordered">
+    <!-- Header Section -->
+    <h2 class="text-center">SAMPLE QUESTION PAPER-I</h2>
+    <h4 class="text-center">UNDER GRADUATE PROGRAMME IN DESIGN</h4>
+    <h5 class="text-center">GENERAL ABILITY TEST — PAPER-I</h5>
+    <div class="d-flex justify-content-between">
+      <p><strong>Time Allowed:</strong> 2 Hours</p>
+      <p><strong>Max. Marks:</strong> 100</p>
+    </div>
+    <p><strong>Total Questions:</strong> 100</p>
+
+    <!-- Instructions Section -->
+    <div class="bordered">
+      <h5>Instructions:</h5>
+      <ul>
+        <li>This test comprises the following sub-tests:</li>
+        <ol>
+          <li>Quantitative Ability</li>
+          <li>Communication Ability</li>
+          <li>English Comprehension</li>
+          <li>Analytical Ability</li>
+          <li>Business Domain Test</li>
+          <li>Thematic Apperception Test</li>
+        </ol>
+        <li>Each question carries one mark.</li>
+        <li>Answers are to be marked on the OMR/ICR Answer-Sheet.</li>
+        <li>Use Ball Pen only for marking answers.</li>
+      </ul>
+    </div>
+
+    <!-- Question Sections -->
+    <div class="bordered">
+      <h5 class="section-header">SAMPLE QUESTIONS</h5>
+
+      <!-- Multiple Choice Section -->
+      <div class="sub-section">
+        <h6>Multiple Choice Questions:</h6>
+        <ol class="questions">
+          <li>How many digits are required for numbering pages of a book with 300 pages?<br>
+            (a) 792 &nbsp; (b) 789 &nbsp; (c) 492 &nbsp; (d) 299</li>
+          <li>8 liters of water is drawn from a cask. How much wine remains?<br>
+            (a) 24 liters &nbsp; (b) 18 liters &nbsp; (c) 32 liters &nbsp; (d) 12 liters</li>
+        </ol>
+      </div>
+
+      <!-- True/False Section -->
+      <div class="sub-section">
+        <h6>True/False Questions:</h6>
+        <ol class="questions">
+          <li>The Earth revolves around the Sun. [True/False]</li>
+          <li>The Moon is a planet. [True/False]</li>
+        </ol>
+      </div>
+
+      <!-- Short Answer Section -->
+      <div class="sub-section">
+        <h6>Short Answer Questions:</h6>
+        <ol class="questions">
+          <li>Explain the process of photosynthesis.</li>
+          <li>What are Newton's three laws of motion?</li>
+        </ol>
+      </div>
+
+      <!-- Long Answer Section -->
+      <div class="sub-section">
+        <h6>Long Answer Questions:</h6>
+        <ol class="questions">
+          <li>Discuss the causes and effects of global warming.</li>
+          <li>Describe the French Revolution and its impact on modern Europe.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+      <p>Page 1</p>
+    </div>
+
+    <!-- Print Button -->
+    <div class="text-center print-btn">
+      <button onclick="window.print()" class="btn btn-primary">Print to PDF</button>
+    </div>
+  </div>
+</body>
+</html>

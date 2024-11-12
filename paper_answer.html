@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Paper with Answers</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      border: 1px solid #000;
+      padding: 20px;
+      background: #fff;
+    }
+
+    h1, h3 {
+      text-transform: uppercase;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .header-section {
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .d-flex p {
+      margin: 0;
+    }
+
+    .instruction {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .instruction ul {
+      margin-left: 20px;
+    }
+
+    .question-section {
+      margin-top: 20px;
+    }
+
+    .question-section h5 {
+      text-decoration: underline;
+      margin-bottom: 10px;
+    }
+
+    .question-grid {
+      margin-bottom: 20px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .correct-answer {
+      font-weight: bold;
+      color: green;
+      margin-top: 5px;
+    }
+
+    .print-btn {
+      margin-top: 20px;
+    }
+
+    @media print {
+      .print-btn { display: none; }
+    }
+
+    .signature-area {
+      text-decoration: underline;
+      display: inline-block;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <!-- First Heading -->
+    <div class="header-section text-center">
+      <h1>Question Paper with Answers</h1>
+      <h3>Exam Paper Name: [Exam Title]</h3>
+    </div>
+
+    <!-- Third Section -->
+    <div class="d-flex justify-content-between">
+      <div>
+        <p><strong>Time:</strong> [Time]</p>
+        <p><strong>Date:</strong> [Date]</p>
+        <p><strong>Code:</strong> [Code]</p>
+      </div>
+      <div>
+        <p><strong>Faculty:</strong> [Faculty Name]</p>
+        <p><strong>Signature:</strong> <span class="signature-area"></span></p>
+      </div>
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="instruction mt-4">
+      <h5>Instructions:</h5>
+      <ul>
+        <li>Read all the questions carefully.</li>
+        <li>Attempt all sections.</li>
+        <li>Use a blue or black pen only.</li>
+      </ul>
+    </div>
+
+    <!-- Multiple Choice Questions Section -->
+    <div class="question-section">
+      <h5>Multiple Choice Questions:</h5>
+      
+      <div class="question-grid">
+        <p>1. How many digits are required for numbering the pages of a book with 300 pages?</p>
+        <div class="options-grid">
+          <p>A. 792</p>
+          <p>B. 789</p>
+          <p>C. 492</p>
+          <p>D. 299</p>
+        </div>
+        <p class="correct-answer">Correct Answer: C. 492</p>
+      </div>
+      
+      <div class="question-grid">
+        <p>2. 8 liters is drawn from a cask full of wine, then refilled with water. How much wine remains?</p>
+        <div class="options-grid">
+          <p>A. 24 liters</p>
+          <p>B. 18 liters</p>
+          <p>C. 32 liters</p>
+          <p>D. 12 liters</p>
+        </div>
+        <p class="correct-answer">Correct Answer: A. 24 liters</p>
+      </div>
+    </div>
+
+    <!-- True/False Questions Section -->
+    <div class="question-section">
+      <h5>True/False Questions:</h5>
+      
+      <div class="question-grid">
+        <p>3. The Earth revolves around the Sun.</p>
+        <div class="options-grid">
+          <p>A. TRUE</p>
+          <p>B. FALSE</p>
+        </div>
+        <p class="correct-answer">Correct Answer: A. TRUE</p>
+      </div>
+      
+      <div class="question-grid">
+        <p>4. The Moon is a planet.</p>
+        <div class="options-grid">
+          <p>A. TRUE</p>
+          <p>B. FALSE</p>
+        </div>
+        <p class="correct-answer">Correct Answer: B. FALSE</p>
+      </div>
+    </div>
+
+    <!-- Short Answer Questions Section -->
+    <div class="question-section">
+      <h5>Short Answer Questions:</h5>
+      <p>5. Explain the process of photosynthesis.</p>
+      <p class="correct-answer">Correct Answer: Photosynthesis is the process by which green plants...</p>
+      
+      <p>6. What are Newton's three laws of motion?</p>
+      <p class="correct-answer">Correct Answer: 1. Law of Inertia, 2. F=ma, 3. Action-Reaction.</p>
+    </div>
+
+    <!-- Long Answer Questions Section -->
+    <div class="question-section">
+      <h5>Long Answer Questions:</h5>
+      <p>7. Discuss the causes and effects of global warming.</p>
+      <p class="correct-answer">Correct Answer: Global warming is caused by...</p>
+      
+      <p>8. Describe the French Revolution and its impact on modern Europe.</p>
+      <p class="correct-answer">Correct Answer: The French Revolution, which began in...</p>
+    </div>
+
+    <!-- Print Button -->
+    <div class="text-center print-btn">
+      <button onclick="printPDF()" class="btn btn-primary">Print to PDF</button>
+    </div>
+  </div>
+
+  <script>
+    function printPDF() {
+      window.print();
+    }
+  </script>
+</body>
+</html>
