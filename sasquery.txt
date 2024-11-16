@@ -1,0 +1,101 @@
+INSERT INTO public.b_subject_code_new(
+	sc_caption, sc_code, sc_created_by, sc_created_date, sc_name, ec_id, difficult, moderate, easy, mm_written, nsql)
+	VALUES ('TAC', '2', 'OLEADMIN', '2024-11-15 12:32:51.044', 'TAC', '8','40','40','20', '500', '4.5');
+
+
+DO $$
+DECLARE 
+    i INT;
+BEGIN
+    FOR i IN 1..100 LOOP
+        INSERT INTO public.b_questions_new(
+            qs_order, 
+            qs_diff_type, 
+            qs_status, 
+            qs_question, 
+            qs_type, 
+            sc_id, 
+            option_a, 
+            option_b, 
+            option_c, 
+            option_d, 
+            correct_ans
+        ) 
+        VALUES (
+            i, 
+            3, 
+            0, 
+            'Dummy question text difficult question ' || i, 
+            1, 
+            1, 
+            'Option A ' || i, 
+            'Option B ' || i, 
+            'Option C ' || i, 
+            'Option D ' || i, 
+            CASE WHEN i % 4 = 1 THEN 'Option A ' || i
+                 WHEN i % 4 = 2 THEN 'Option B ' || i
+                 WHEN i % 4 = 3 THEN 'Option C ' || i
+                 ELSE 'Option D ' || i
+            END
+        );
+    END LOOP;
+END $$;
+
+
+
+/////////////////////////////////
+DO $$
+DECLARE 
+    i INT;
+BEGIN
+    FOR i IN 1..100 LOOP
+        INSERT INTO public.b_questions_new(
+            qs_order, 
+            qs_diff_type, 
+            qs_status, 
+            qs_question, 
+            qs_type, 
+            sc_id, 
+            option_a, 
+            option_b, 
+            correct_ans
+        ) 
+        VALUES (
+            0, 
+            3 , 
+            0, 
+            'Dummy true/false question text ' || i, 
+            3, 
+            1, 
+            'TRUE', 
+            'FALSE', 
+            CASE WHEN i % 2 = 0 THEN 'FALSE' ELSE 'TRUE' END
+        );
+    END LOOP;
+END $$;
+
+
+=============
+SELECT 
+    qs.sc_id, 
+    qs.qs_diff_type,td.label,
+    COUNT(qs.qs_diff_type) AS diff_type_count,
+	 CASE 
+        WHEN td.label = 'Easy' THEN sc.easy
+        WHEN td.label = 'Moderate' THEN sc.moderate
+        WHEN td.label = 'Difficult' THEN sc.difficult
+        ELSE NULL
+    END AS comparison_value
+FROM 
+    b_questions_new qs
+INNER JOIN 
+    t_domain_value td ON td.codevalue = qs.qs_diff_type
+INNER JOIN 
+    b_subject_code_new sc ON sc.sc_id = qs.sc_id
+WHERE 
+    td.domainid = 'DIFF_TYPE'
+GROUP BY 
+    qs.sc_id, qs.qs_diff_type,td.label,sc.easy,sc.moderate,sc.difficult
+ORDER BY 
+    qs.sc_id, qs.qs_diff_type;
+
