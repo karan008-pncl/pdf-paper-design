@@ -1,0 +1,91 @@
+@Repository
+public class QuestionDaoImpl implements QuestionDao {
+
+    @Autowired
+    private DataSource dataSource;
+
+    private Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
+
+    @Override
+    public List<Question> generateQuestionPaper() {
+        List<Question> questionPaper = new ArrayList<>();
+
+        try (Connection conn = getConnection()) {
+            // Add 15 questions from each chapter
+            for (long chapterId = 1; chapterId <= 15; chapterId++) {
+                questionPaper.addAll(getChapterQuestions(conn, chapterId, 15));
+            }
+
+            // Remaining questions
+            int remainingQuestions = 400 - questionPaper.size(); // 175
+            int multipleChoice = remainingQuestions / 2; // 87
+            int trueFalse = remainingQuestions - multipleChoice; // 88
+
+            // Difficulty breakdown
+            int easyMC = (int) (multipleChoice * 0.4);
+            int easyTF = (int) (trueFalse * 0.4);
+            int moderateMC = (int) (multipleChoice * 0.4);
+            int moderateTF = (int) (trueFalse * 0.4);
+            int difficultMC = (int) (multipleChoice * 0.2);
+            int difficultTF = (int) (trueFalse * 0.2);
+
+            // Add questions based on difficulty and type
+            questionPaper.addAll(getQuestions(conn, "easy", 1, easyMC));
+            questionPaper.addAll(getQuestions(conn, "easy", 2, easyTF));
+            questionPaper.addAll(getQuestions(conn, "moderate", 1, moderateMC));
+            questionPaper.addAll(getQuestions(conn, "moderate", 2, moderateTF));
+            questionPaper.addAll(getQuestions(conn, "difficult", 1, difficultMC));
+            questionPaper.addAll(getQuestions(conn, "difficult", 2, difficultTF));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return questionPaper;
+    }
+
+    private List<Question> getChapterQuestions(Connection conn, Long chapterId, int limit) throws SQLException {
+        List<Question> questions = new ArrayList<>();
+        String query = "SELECT * FROM b_questions WHERE sc_id = ? ORDER BY random() LIMIT ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setLong(1, chapterId);
+            stmt.setInt(2, limit);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                questions.add(mapRowToQuestion(rs));
+            }
+        }
+        return questions;
+    }
+
+    private List<Question> getQuestions(Connection conn, String difficulty, int type, int limit) throws SQLException {
+        List<Question> questions = new ArrayList<>();
+        String query = "SELECT * FROM b_questions WHERE qs_diff_type = ? AND qs_type = ? ORDER BY random() LIMIT ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, difficulty);
+            stmt.setInt(2, type);
+            stmt.setInt(3, limit);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                questions.add(mapRowToQuestion(rs));
+            }
+        }
+        return questions;
+    }
+
+    private Question mapRowToQuestion(ResultSet rs) throws SQLException {
+        Question question = new Question();
+        question.setQsId(rs.getLong("qs_id"));
+        question.setQsOrder(rs.getInt("qs_order"));
+        question.setQsDiffType(rs.getString("qs_diff_type"));
+        question.setQsStatus(rs.getInt("qs_status"));
+        question.setQsQuestion(rs.getString("qs_question"));
+        question.setQsType(rs.getInt("qs_type"));
+        question.setScId(rs.getLong("sc_id"));
+        return question;
+    }
+}
