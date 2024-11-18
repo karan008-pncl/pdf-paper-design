@@ -1,0 +1,126 @@
+@Entity
+@Table(name = "b_questions")
+public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long qsId;
+
+    private int qsOrder;
+    private String qsDiffType; // easy, moderate, difficult
+    private int qsStatus;
+    private String qsQuestion;
+    private int qsType; // 1: multiple-choice, 2: true/false
+    private Long scId;  // Chapter ID
+
+    // Other fields (options, correct_ans, etc.)
+
+    // Getters and setters
+}
+====
+@Repository
+public class QuestionRepository {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<Question> getQuestions(String difficulty, int type, int limit) {
+        String hql = "FROM Question q WHERE q.qsDiffType = :difficulty AND q.qsType = :type ORDER BY random()";
+        return entityManager.createQuery(hql, Question.class)
+                .setParameter("difficulty", difficulty)
+                .setParameter("type", type)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public List<Question> getChapterQuestions(Long chapterId, int limit) {
+        String hql = "FROM Question q WHERE q.scId = :chapterId ORDER BY random()";
+        return entityManager.createQuery(hql, Question.class)
+                .setParameter("chapterId", chapterId)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+}
+===
+@Service
+public class QuestionService {
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    public List<Question> generateQuestionPaper() {
+        List<Question> questionPaper = new ArrayList<>();
+
+        // 15 fixed questions from each chapter
+        for (long chapterId = 1; chapterId <= 15; chapterId++) {
+            questionPaper.addAll(questionRepository.getChapterQuestions(chapterId, 15));
+        }
+
+        // Remaining 175 questions divided into difficulty and type
+        int remainingQuestions = 400 - 15 * 15; // 175
+
+        int multipleChoice = remainingQuestions / 2;  // 87.5 -> 87
+        int trueFalse = remainingQuestions - multipleChoice; // 88
+
+        // Easy (40%)
+        questionPaper.addAll(questionRepository.getQuestions("easy", 1, (int) (multipleChoice * 0.4)));
+        questionPaper.addAll(questionRepository.getQuestions("easy", 2, (int) (trueFalse * 0.4)));
+
+        // Moderate (40%)
+        questionPaper.addAll(questionRepository.getQuestions("moderate", 1, (int) (multipleChoice * 0.4)));
+        questionPaper.addAll(questionRepository.getQuestions("moderate", 2, (int) (trueFalse * 0.4)));
+
+        // Difficult (20%)
+        questionPaper.addAll(questionRepository.getQuestions("difficult", 1, (int) (multipleChoice * 0.2)));
+        questionPaper.addAll(questionRepository.getQuestions("difficult", 2, (int) (trueFalse * 0.2)));
+
+        return questionPaper;
+    }
+}
+====
+@Service
+public class QuestionService {
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    public List<Question> generateQuestionPaper() {
+        List<Question> questionPaper = new ArrayList<>();
+
+        // 15 fixed questions from each chapter
+        for (long chapterId = 1; chapterId <= 15; chapterId++) {
+            questionPaper.addAll(questionRepository.getChapterQuestions(chapterId, 15));
+        }
+
+        // Remaining 175 questions divided into difficulty and type
+        int remainingQuestions = 400 - 15 * 15; // 175
+
+        int multipleChoice = remainingQuestions / 2;  // 87.5 -> 87
+        int trueFalse = remainingQuestions - multipleChoice; // 88
+
+        // Easy (40%)
+        questionPaper.addAll(questionRepository.getQuestions("easy", 1, (int) (multipleChoice * 0.4)));
+        questionPaper.addAll(questionRepository.getQuestions("easy", 2, (int) (trueFalse * 0.4)));
+
+        // Moderate (40%)
+        questionPaper.addAll(questionRepository.getQuestions("moderate", 1, (int) (multipleChoice * 0.4)));
+        questionPaper.addAll(questionRepository.getQuestions("moderate", 2, (int) (trueFalse * 0.4)));
+
+        // Difficult (20%)
+        questionPaper.addAll(questionRepository.getQuestions("difficult", 1, (int) (multipleChoice * 0.2)));
+        questionPaper.addAll(questionRepository.getQuestions("difficult", 2, (int) (trueFalse * 0.2)));
+
+        return questionPaper;
+    }
+}
+@Controller
+public class QuestionController {
+
+    @Autowired
+    private QuestionService questionService;
+
+    @GetMapping("/generateQuestionPaper")
+    @ResponseBody
+    public List<Question> generateQuestionPaper() {
+        return questionService.generateQuestionPaper();
+    }
+}
